@@ -4,7 +4,6 @@ import org.jcodec.common.io.NIOUtils;
 import org.jcodec.common.model.Picture;
 import org.jcodec.scale.AWTUtil;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -121,9 +120,13 @@ public class Main extends JFrame {
                     double b = 0;
                     int sumC = 0;
 
-                    int skippingPixelsCount = (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL - y * image.getHeight() / NUM_OF_CH_IN_COL - 1;
 
-
+                    int skippingPixelsCount;
+                    if (SKIP_PIXELS) {
+                        skippingPixelsCount = (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL - y * image.getHeight() / NUM_OF_CH_IN_COL - 1;
+                    } else {
+                        skippingPixelsCount = 1;
+                    }
                     for (int i = y * image.getHeight() / NUM_OF_CH_IN_COL; i < (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL; i+= skippingPixelsCount) {
                         for (int j = x * image.getWidth() / NUM_OF_CH_IN_LINE; j < (x + 1) * image.getWidth() / NUM_OF_CH_IN_LINE; j+= skippingPixelsCount) {
 
@@ -148,7 +151,6 @@ public class Main extends JFrame {
 
         private char returnStrPos(double g) {
             final char str;
-
             if (g >= 230.0) {
                 str = ' ';
             } else if (g >= 200.0) {
@@ -169,12 +171,10 @@ public class Main extends JFrame {
                 str = '@';
             }
             return str;
-
         }
 
         private char returnStrNeg(double g) {
             final char str;
-
             if (g >= 230.0) {
                 str = '@';
             } else if (g >= 200.0) {
@@ -195,8 +195,6 @@ public class Main extends JFrame {
                 str = ' ';
             }
             return str;
-
         }
-
     }
 }
