@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class Main extends JFrame {
+    private final boolean SKIP_PIXELS = true;
     private final boolean NEGATIVE = false;
     private final int WINDOW_WIDTH = 1366;
     private final int WINDOW_HEIGHT = 768;
@@ -72,11 +73,12 @@ public class Main extends JFrame {
                 try {
                     t = System.currentTimeMillis() - t;
                     t = 33 - t;
+                    System.out.println(t);
                     if (t < 0) {
                         t = 0;
                     }
-                    System.out.println(t);
                     Thread.sleep(t);
+                    t = System.currentTimeMillis();
                 } catch (InterruptedException ex) {
                 }
             }
@@ -119,8 +121,11 @@ public class Main extends JFrame {
                     double b = 0;
                     int sumC = 0;
 
-                    for (int i = y * image.getHeight() / NUM_OF_CH_IN_COL; i < (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL; i++) {
-                        for (int j = x * image.getWidth() / NUM_OF_CH_IN_LINE; j < (x + 1) * image.getWidth() / NUM_OF_CH_IN_LINE; j++) {
+                    int skippingPixelsCount = (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL - y * image.getHeight() / NUM_OF_CH_IN_COL - 1;
+
+
+                    for (int i = y * image.getHeight() / NUM_OF_CH_IN_COL; i < (y + 1) * image.getHeight() / NUM_OF_CH_IN_COL; i+= skippingPixelsCount) {
+                        for (int j = x * image.getWidth() / NUM_OF_CH_IN_LINE; j < (x + 1) * image.getWidth() / NUM_OF_CH_IN_LINE; j+= skippingPixelsCount) {
 
                             Color pixelColor = new Color(image.getRGB(j, i));
                             r += (double) pixelColor.getRed();
